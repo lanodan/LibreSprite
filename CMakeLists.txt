@@ -95,7 +95,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_PROFILE "${CMAKE_BINARY_DIR}/bin")
 
 set(LOADPNG_DIR         ${CMAKE_SOURCE_DIR}/third_party/loadpng)
 set(SIMPLEINI_DIR       ${CMAKE_SOURCE_DIR}/third_party/simpleini)
-set(DUKTAPE_DIR         ${CMAKE_SOURCE_DIR}/third_party/duktape)
 set(MODP_B64_DIR        ${CMAKE_SOURCE_DIR}/third_party/modp_b64)
 set(QOI_DIR             ${CMAKE_SOURCE_DIR}/third_party/qoi)
 
@@ -141,6 +140,16 @@ include_directories(${QOI_DIR})
 find_library(TINYXML2_LIBRARY NAMES tinyxml2)
 find_path(TINYXML2_INCLUDE_DIR NAMES tinyxml2.h)
 include_directories(${TINYXML2_INCLUDE_DIR})
+
+option(USE_SYSTEM_DUKTAPE "Use system-installed duktape" OFF)
+if(USE_SYSTEM_DUKTAPE)
+  find_package(PkgConfig REQUIRED)
+
+  pkg_search_module(DUKTAPE duktape)
+  include_directories(${DUKTAPE_INCLUDE_DIRS})
+else()
+  set(DUKTAPE_DIR ${CMAKE_SOURCE_DIR}/third_party/duktape)
+endif()
 
 if(NOT GEN_ONLY)
 # zlib
